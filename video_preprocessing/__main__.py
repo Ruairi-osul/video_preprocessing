@@ -36,7 +36,8 @@ def preprocess_a_video(
         root = str(Path(videos[0]).name)
         curname = root if ".mp4" in root.lower() else root.split(".")[
             0] + ".mp4"
-        output_name = "".join(["processed", curname])
+        output_name = "_".join(["processed", curname])
+    output_name = Path(output_dir) / output_name
     videos = list(map(lambda x: mp.VideoFileClip(x), videos))
     output_video = mp.concatenate_videoclips(videos)
 
