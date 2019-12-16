@@ -16,6 +16,7 @@ def preprocess_a_video(
     to_black_white=True,
     output_fps=30,
     contrast_luminosity=None,
+    brightness_factor=None
 ):
     """
     Takes a list of video paths. It compresses them to a specified bitrate
@@ -49,9 +50,14 @@ def preprocess_a_video(
             contrast=contrast_luminosity["contrast"],
             lum=contrast_luminosity["lum"],
         )
+    if brightness_factor:
+        output_video = output_video.fx(
+            vfx.all.colorx,
+            factor=brightness_factor
+        )
 
     output_video.write_videofile(
-        output_name, bitrate=output_bitrate, fps=output_fps)
+        str(output_name), bitrate=output_bitrate, fps=output_fps)
 
 def main(args=None):
     for input_json in sys.argv[1:]:
