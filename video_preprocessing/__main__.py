@@ -52,7 +52,7 @@ def preprocess_a_video(
         )
     if brightness_factor:
         output_video = output_video.fx(
-            vfx.all.colorx,
+            vfx.colorx,
             factor=brightness_factor
         )
 

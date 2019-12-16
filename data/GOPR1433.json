@@ -2,14 +2,10 @@
     "videos": [
         "/media/rory/My Passport/Deeplabcut/Novel_Retrieval/GOPR1433.MP4"
     ],
-    "output_bitrate": "200k",
+    "output_bitrate": "650k",
     "output_name": null,
     "to_black_white": true,
     "output_fps": 20,
     "output_dir": "/mnt/86f4d28f-2b08-48b6-9bc1-b8e030877e3b/preprocessed_videos",
-    "contrast_luminosity": {
-        "contrast": 1,
-        "lum": 5
-    },
-    "brightness_factor": 3
+    "brightness_factor": 2
 }
