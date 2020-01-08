@@ -7,11 +7,13 @@ A small installable python script for compressing video files.
 
 ~~~
 $ git clone https://github.com/Ruairi-osul/video_preprocessing.git
+$ cd video_preprocessing
 $ pip3 install .
 ~~~
 or
 ```
 $ git clone https://github.com/Ruairi-osul/video_preprocessing.git
+$ cd video_preprocessing
 $ pip install .
 ```
 
