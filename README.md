@@ -34,7 +34,7 @@ $ video_preprocessing --video_dir PATH_TO_DIRECTORY_CONTAINING_YOUR_VIDEOS --vid
 ##### Specify options
 
 ```
-$ video_preprocessing --video_dir SOME_DIR --video_suffix .avi --to_black_white --brightness_factor 2
+$ video_preprocessing --video_dir SOME_DIR --video_suffix .avi --to_black_white --brightness 2
 ```
 
 ##### See available options
