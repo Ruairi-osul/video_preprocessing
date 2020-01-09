@@ -1,7 +1,5 @@
 {
-    "videos": [
-        "/media/rory/My Passport/Deeplabcut/Novel_Retrieval/GOPR1433.MP4"
-    ],
+    "video": "/media/rory/My Passport/Deeplabcut/Novel_Retrieval/GOPR1433.MP4",
     "output_bitrate": "650k",
     "output_name": null,
     "to_black_white": true,

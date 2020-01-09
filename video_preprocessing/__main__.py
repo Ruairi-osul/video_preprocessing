@@ -2,23 +2,23 @@
 
 import sys
 import json
-import moviepy.editor as mp
-import moviepy.video.fx.all as vfx
+import ffmpeg 
 from pathlib import Path
 from .utils import json_to_dict
 import argparse
 from glob import glob
 
 def preprocess_a_video(
-    videos,
-    output_bitrate: str = "500k",
+    video: str,
+    output_bitrate: str = "1000k",
     to_black_white=True,
     output_fps=30,
-    output_file_format: str = ".mp4",
-    contrast_luminosity=None,
-    brightness_factor=None,
+    output_file_format: str = "avi",
+    brightness: int = 1,
     output_name: str = None,
     output_dir: str = None,
+    overwrite: bool = True,
+    verbose: bool = False,
 ):
     """
     Takes a list of video paths. It compresses them to a specified bitrate
@@ -35,32 +35,32 @@ def preprocess_a_video(
     """
     if not output_dir:
         output_dir = Path(".").absolute()
+    else:
+        output_dir = str(Path(output_dir).absolute())
     if not output_name:
-        root = str(Path(videos[0]).name)
-        curname = root if ".mp4" in root.lower() else root.split(".")[
-            0] + ".mp4"
-        output_name = "_".join(["processed", curname])
+        root = str(Path(video).name)
+        output_name = f"{root.split('.')[0]}.{output_file_format}"
+        output_name = "_".join(["processed", output_name])
     
     output_name = Path(output_dir) / output_name
-    videos = list(map(lambda x: mp.VideoFileClip(x), videos))
-    output_video = mp.concatenate_videoclips(videos)
+    stream = ffmpeg.input(str(video))
+    
+    if output_fps:
+        stream = ffmpeg.filter(stream, "fps", fps=int(output_fps))
 
     if to_black_white:
-        output_video = output_video.fx(vfx.blackwhite)
-    if contrast_luminosity is not None:
-        output_video = output_video.fx(
-            vfx.lum_contrast,
-            contrast=contrast_luminosity["contrast"],
-            lum=contrast_luminosity["lum"],
-        )
-    if brightness_factor:
-        output_video = output_video.fx(
-            vfx.colorx,
-            factor=brightness_factor
-        )
+        stream = ffmpeg.hue(stream, s=0)
 
-    output_video.write_videofile(
-        str(output_name), bitrate=output_bitrate, fps=output_fps)
+    if brightness:
+        stream = ffmpeg.hue(stream, b=int(brightness))
+
+    stream = ffmpeg.output(stream, str(output_name), **{"b:v": output_bitrate}, 
+                                format=output_file_format)
+    if overwrite:
+        stream = ffmpeg.overwrite_output(stream)
+    if verbose:
+        print(stream.compile())
+    stream.run()
 
 def main(args=None):
     parser = argparse.ArgumentParser()
@@ -72,28 +72,30 @@ def main(args=None):
         help="path to video file to be processed")
     parser.add_argument("--video_dir",  required=False,
         help="path to directory to be searched for video files for processing")
-    parser.add_argument("--output_dir", required=False, 
-        default="/mnt/86f4d28f-2b08-48b6-9bc1-b8e030877e3b/preprocessed_videos",
+    parser.add_argument("--output_dir", required=False,
         help="path to directory where processed videos will be saved")
     parser.add_argument("--output_bitrate", required=False, 
         default="750k",
         help="bitrate of the processed video file e.g. '500k'")
-    parser.add_argument("--to_black_white", required=False,
+    parser.add_argument("--to_black_white", action="store_true", required=False,
         default=True,
         help="whether to convert video to black and white")
-    parser.add_argument("--brightness_factor", required=False, 
-        default=2.5,
-        help="factor for increasing the brightness")
     parser.add_argument("--video_suffix", required=False,
         help="suffix to search for when searching for video files")
     parser.add_argument("--output_name", required=False,
         help="if processing a single video, its output file name can be specified here")
     parser.add_argument("--output_file_format", required=False,
-        default=".mp4",
+        default="avi",
         help="format of output file")
+    parser.add_argument("--brightness", required=False, default=1,
+        help="brightness level between -10 and 10")
     parser.add_argument("--output_fps", required=False,
         default=30,
         help="desired output_fps")
+    parser.add_argument("--overwrite", required=False, default=True, action="store_true",
+        help="Overwrite output file if it exists")
+    parser.add_argument("--verbose", default=False, action="store_true", 
+        help="print the call command to the terminal")
 
     args = vars(parser.parse_args())
     args = {k: v for k, v in args.items() if v is not None}
@@ -107,9 +109,9 @@ def main(args=None):
             config_options = json_to_dict(input_json)
             preprocess_a_video(**config_options)
     elif args.get("video"):
-        video = [args["video"]]
+        video = args["video"]
         del args["video"]
-        preprocess_a_video(videos=video, **args)
+        preprocess_a_video(video=video, **args)
     elif args.get("video_dir"):
         if "video_suffix" not in args:
             args["video_suffix"] = '.mp4'
@@ -118,7 +120,7 @@ def main(args=None):
         del args["video_suffix"]
 
         for video in input_videos:
-            preprocess_a_video(videos=[video], **args)
+            preprocess_a_video(video=video, **args)
 
 if __name__ == "__main__":
     main()
