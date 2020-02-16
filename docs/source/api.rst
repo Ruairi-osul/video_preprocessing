@@ -3,7 +3,7 @@ API Reference
 
 
 .. argparse::
-   :module: video_preprocessing.__main__
+   :filename: ../../video_preprocessing/__main__.py
    :func: return_parser
-   :prog: video_preprocessing:
+   :prog: video_preprocessing
 
