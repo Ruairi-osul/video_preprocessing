@@ -47,3 +47,8 @@ def return_parser():
     
     # program behaviour options
     parser.add_argument("--overwrite", required=False, default=True, action="store_true",
+                                    help="Overwrite output file if it exists")
+    parser.add_argument("--verbose", default=False, action="store_true", 
+                                        help="print the call command to the terminal")
+
+    return parser
