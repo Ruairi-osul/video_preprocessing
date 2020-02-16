@@ -10,7 +10,7 @@ setup(
     version="0.0.1",
     url="https://github.com/Ruairi-osul/video_preprocessing",
     author="Ruairi O'Sullivan",
-    author_email="ruairi.osullivan.work@gmail.ie",
+    author_email="ruairi.osullivan.work@gmail.com",
     license="GNU GPLv3",
     keywords="video",
     project_urls={"Source": "https://github.com/Ruairi-osul/video_preprocessing"},
