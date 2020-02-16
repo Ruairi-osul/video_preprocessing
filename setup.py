@@ -15,7 +15,7 @@ setup(
     keywords="video",
     project_urls={"Source": "https://github.com/Ruairi-osul/video_preprocessing"},
     packages=find_packages(),
-    python_requires=">=3.3",
+    python_requires=">=3",
     install_requires="ffmpeg-python==0.2.0",
     entry_points={
         "console_scripts":[

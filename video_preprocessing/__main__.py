@@ -25,7 +25,7 @@ def preprocess_a_video(
     Takes a list of video paths. It compresses them to a specified bitrate
     and concatenates them together and saving them to a file
 
-    Parameters:
+    Args:
         - videos: a list of paths to video files to work on (should be in order for concatenation)
         - output_bitrate: The bitrate of the output video file. 
                           This corresponds to the quality of the output video 
@@ -73,9 +73,10 @@ def preprocess_a_video(
     # run ffmpex
     stream.run()
 
-def main(args=None):
-    # json options
+def return_parser():
     parser = argparse.ArgumentParser()
+    
+    # json options
     parser.add_argument("-j", "--json", required=False,
                         help="path to json file containing instructions for individual files")
     parser.add_argument("--json_dir",
@@ -125,6 +126,10 @@ def main(args=None):
     parser.add_argument("--verbose", default=False, action="store_true", 
                         help="print the call command to the terminal")
 
+    return parser
+
+def main(args=None):
+    parser = return_parser()
     args = vars(parser.parse_args())
     args = {k: v for k, v in args.items() if v is not None}
 
