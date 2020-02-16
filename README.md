@@ -1,6 +1,6 @@
 # video_preprocessing
 
-A small installable python script for compressing video files.
+A small installable python script for compressing video files. Read the docs [here](https://video-preprocessing.readthedocs.io/en/latest/).
 
 
 ## Installation
